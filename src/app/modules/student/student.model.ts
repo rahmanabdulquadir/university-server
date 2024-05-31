@@ -3,11 +3,9 @@ import {
   TGuardian,
   TLocalGuardian,
   TStudent,
-  // StudentMethods,
   StudentModel,
   TUserName,
 } from "./student.interface";
-
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -150,8 +148,10 @@ const studentSchema = new Schema<TStudent, StudentModel>(
     },
     profileImg: {
       type: String,
-      required: [true, "Profile image is required"],
-      trim: true,
+    },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: "AcademicSemester",
     },
     isDeleted: {
       type: Boolean,
