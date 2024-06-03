@@ -1,13 +1,13 @@
 import { Student } from "./student.model";
 
 const getAllStudentsFromDB = async () => {
-  const result = await Student.find();
+  const result = await Student.find().populate("admissionSemester").populate("academicDepartment");
   return result;
 };
 
 const getStudentFromDB = async (id: string) => {
-  // const result = await Student.findOne({ id });
-  const result = await Student.aggregate([{ $match: { id: id } }]);
+  const result = await Student.findOne({ id }).populate("admissionSemester", "academicDepartment");
+  // const result = await Student.aggregate([{ $match: { id: id } }]);
   return result;
 };
 

@@ -2,7 +2,7 @@ import { Model, Types } from "mongoose";
 
 export type TUserName = {
   firstName: string;
-  middleName?: string;
+  middleName: string;
   lastName: string;
 };
 
@@ -27,20 +27,22 @@ export type TStudent = {
   user: Types.ObjectId;
   password: string;
   name: TUserName;
-  gender: "Male" | "Female" | "Other";
+  gender: 'male' | 'female' | 'other';
   dateOfBirth?: string;
   email: string;
   contactNo: string;
-  emergencyNo: string;
-  bloodGroup?: "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
+  emergencyContactNo: string;
+  bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   presentAddress: string;
   permanentAddress: string;
   guardian: TGuardian;
   localGuardian: TLocalGuardian;
   profileImg?: string;
-  admissionSemester: Types.ObjectId
+  admissionSemester: Types.ObjectId;
   isDeleted: boolean;
+  academicDepartment: Types.ObjectId;
 };
+
 
 // for creating static
 export interface StudentModel extends Model<TStudent> {
