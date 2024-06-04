@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import config from "../../config";
 import { TAcademicSemester } from "../academicSemester/academicSemester.interface";
 import { AcademicSemester } from "../academicSemester/academicSemester.model";
@@ -6,12 +7,14 @@ import { Student } from "../student/student.model";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { generateStudentId } from "./user.utils";
+import AppError from "../../errors/AppError";
+import { BAD_REQUEST } from "http-status";
 
 const createStudentIntoDB = async (password: string, payload: TStudent) => {
   // create a user object
   const userData: Partial<TUser> = {};
 
-  //if password is not given , use deafult password
+  //if password is not given , use default password
   userData.password = password || (config.default_password as string);
 
   //set student role
@@ -22,20 +25,36 @@ const createStudentIntoDB = async (password: string, payload: TStudent) => {
     payload.admissionSemester,
   );
 
-  //set  generated id
+  const session = await mongoose.startSession()
+  try {
+    session.startTransaction()
+    //set  generated id
   userData.id = await generateStudentId(admissionSemester as TAcademicSemester);
 
   // create a user
-  const newUser = await User.create(userData);
+  const newUser = await User.create([userData], {session});
 
   //create a student
-  if (Object.keys(newUser).length) {
+  if (!newUser.length) {
+    throw new AppError(BAD_REQUEST, "Failed to create user")
+  }
     // set id , _id as user
-    payload.id = newUser.id;
-    payload.user = newUser._id; //reference _id
+    payload.id = newUser[0].id;
+    payload.user = newUser[0]._id; //reference _id
 
-    const newStudent = await Student.create(payload);
+    const newStudent = await Student.create([payload], {session});
+
+    if(!newStudent.length){
+      throw new AppError(BAD_REQUEST, "Failed to create student")
+    }
+    await session.commitTransaction()
+    await session.endSession()
     return newStudent;
+  
+  } catch (error) {
+    session.abortTransaction()
+    session.endSession()
+    throw new Error("Failed to create student")
   }
 };
 
