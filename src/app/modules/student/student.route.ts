@@ -9,12 +9,12 @@ const router = express.Router();
 
 //will call controller function from here
 router.get("/", StudentControllers.getAllStudents);
-router.get("/:studentId", StudentControllers.getASingleStudent);
+router.get("/:id", StudentControllers.getASingleStudent);
 router.patch(
-  "/:studentId",
+  "/:id",
   validateRequest(updateStudentValidationSchema),
   StudentControllers.updateStudent
 );
-router.delete("/:studentId", StudentControllers.deleteStudent);
+router.delete("/:id", StudentControllers.deleteStudent);
 
 export const StudentRoutes = router;
