@@ -5,7 +5,6 @@ import catchAsync from "../../utils/catchAsync";
 
 //get all the students data from db
 const getAllStudents = catchAsync(async (req, res) => {
- 
   const result = await StudentServices.getAllStudentsFromDB(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -31,7 +30,7 @@ const getASingleStudent = catchAsync(async (req, res) => {
 //update a student
 const updateStudent = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const {student} = req.body
+  const { student } = req.body;
 
   const result = await StudentServices.updateStudentIntoDB(id, student);
 
