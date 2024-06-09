@@ -8,6 +8,7 @@ import { Faculty } from "../Faculty/faculty.model";
 import { OfferedCourse } from "./offeredCourse.model";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { TOfferedCourse } from "./offeredCourse.interface";
+import { hasTimeConflict } from "./offeredCourse.utils";
 
 const createOfferedCourseIntoDB = async (payload: TOfferedCourse) => {
   const {
