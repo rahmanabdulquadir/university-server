@@ -89,6 +89,7 @@ const adminSchema = new Schema<TAdmin, AdminModel>(
   },
 );
 
+
 // generating full name
 adminSchema.virtual('fullName').get(function () {
   return (
